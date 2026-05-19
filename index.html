@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Padaria Compra Fácil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">PF</div>
+          <div>
+            <p>Padaria</p>
+            <h1>Compra Fácil</h1>
+          </div>
+        </div>
+
+        <nav class="nav-tabs" aria-label="Navegação principal">
+          <button class="nav-tab active" data-tab="insumos" type="button">
+            <span data-icon="package"></span>
+            Insumos
+          </button>
+          <button class="nav-tab" data-tab="compras" type="button">
+            <span data-icon="check"></span>
+            Compra
+          </button>
+          <button class="nav-tab" data-tab="encomendas" type="button">
+            <span data-icon="calendar"></span>
+            Encomendas
+          </button>
+          <button class="nav-tab" data-tab="relatorios" type="button">
+            <span data-icon="chart"></span>
+            Relatórios
+          </button>
+        </nav>
+
+        <div class="summary-panel">
+          <span>Resumo</span>
+          <strong id="summaryTotal">R$ 0,00</strong>
+          <small id="summaryItems">0 itens na compra</small>
+        </div>
+      </aside>
+
+      <main class="content">
+        <section class="topbar">
+          <div>
+            <p class="eyebrow">Gestão de compras e encomendas</p>
+            <h2 id="pageTitle">Selecionar insumos</h2>
+          </div>
+          <div class="search-wrap">
+            <span data-icon="search"></span>
+            <input id="searchInput" type="search" placeholder="Buscar farinha, fermento, leite..." />
+          </div>
+        </section>
+
+        <section id="insumos" class="tab-panel active">
+          <div class="inventory-layout">
+            <form id="productForm" class="product-form">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">Cadastro de insumo</p>
+                  <h3 id="productFormTitle">Novo item</h3>
+                </div>
+              </div>
+
+              <input id="editingProductId" type="hidden" />
+              <label>
+                Item
+                <input id="productName" required type="text" placeholder="Nome do insumo" />
+              </label>
+              <label>
+                Categoria
+                <input id="productCategory" required list="categoryOptions" type="text" placeholder="Produção" />
+                <datalist id="categoryOptions"></datalist>
+              </label>
+              <div class="form-grid">
+                <label>
+                  Quantidade
+                  <input id="productQty" required min="0" step="0.01" type="number" placeholder="1" />
+                </label>
+                <label>
+                  Unidade
+                  <input id="productQtyUnit" required type="text" placeholder="saco, caixa, un." />
+                </label>
+              </div>
+              <div class="form-grid">
+                <label>
+                  Peso/volume
+                  <input id="productWeight" min="0" step="0.01" type="number" placeholder="25" />
+                </label>
+                <label>
+                  Medida
+                  <input id="productWeightUnit" type="text" placeholder="kg, g, L" />
+                </label>
+              </div>
+              <label>
+                Preço estimado
+                <input id="productPrice" required min="0" step="0.01" type="number" placeholder="0,00" />
+              </label>
+              <label>
+                Observação
+                <textarea id="productDesc" rows="3" placeholder="Uso principal, fornecedor ou marca"></textarea>
+              </label>
+              <div class="button-row">
+                <button class="primary-button" type="submit">
+                  <span data-icon="save"></span>
+                  Salvar item
+                </button>
+                <button id="cancelProductEdit" class="ghost-button muted" type="button">Cancelar</button>
+              </div>
+            </form>
+
+            <div class="inventory-panel">
+              <div class="toolbar">
+                <div id="categoryTabs" class="segmented" aria-label="Categorias"></div>
+                <button id="clearCart" class="ghost-button" type="button">
+                  <span data-icon="trash"></span>
+                  Limpar compra
+                </button>
+              </div>
+              <div id="productsGrid" class="products-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="compras" class="tab-panel">
+          <div class="shopping-layout">
+            <div>
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Conferência de compra</p>
+                  <h3>Itens selecionados</h3>
+                </div>
+                <div class="button-row">
+                  <button id="markAllChecked" class="primary-button" type="button">
+                    <span data-icon="check"></span>
+                    Marcar todos
+                  </button>
+                  <button id="finishPurchase" class="primary-button alt" type="button">
+                    <span data-icon="save"></span>
+                    Finalizar compra
+                  </button>
+                  <a id="whatsappExport" class="whatsapp-button" href="#" target="_blank" rel="noopener">
+                    <span data-icon="whatsapp"></span>
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
+              <div id="shoppingList" class="shopping-list"></div>
+            </div>
+
+            <aside class="import-panel">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">Importar lista</p>
+                  <h3>Texto ou arquivo</h3>
+                </div>
+              </div>
+              <textarea id="importText" rows="9" placeholder="Farinha de trigo; Produção; 1; saco; 25; kg; 98,90"></textarea>
+              <input id="importFile" type="file" accept=".txt,.csv,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+              <button id="importList" class="primary-button full" type="button">
+                <span data-icon="upload"></span>
+                Importar para compra
+              </button>
+            </aside>
+          </div>
+        </section>
+
+        <section id="encomendas" class="tab-panel">
+          <div class="orders-layout">
+            <form id="orderForm" class="order-form">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">Agenda de produção</p>
+                  <h3>Nova encomenda</h3>
+                </div>
+              </div>
+
+              <label>
+                Cliente
+                <input id="customerName" required type="text" placeholder="Nome do cliente" />
+              </label>
+              <label>
+                Telefone
+                <input id="customerPhone" type="tel" placeholder="(00) 00000-0000" />
+              </label>
+              <label>
+                Pedido
+                <textarea id="orderItems" required rows="4" placeholder="Ex.: 2 bolos de chocolate, 100 salgados..."></textarea>
+              </label>
+              <div class="form-grid">
+                <label>
+                  Data
+                  <input id="orderDate" required type="date" />
+                </label>
+                <label>
+                  Horário
+                  <input id="orderTime" required type="time" />
+                </label>
+              </div>
+              <label>
+                Observações
+                <textarea id="orderNotes" rows="3" placeholder="Retirada, entrega, sinal pago..."></textarea>
+              </label>
+              <button class="primary-button full" type="submit">
+                <span data-icon="plus"></span>
+                Salvar encomenda
+              </button>
+            </form>
+
+            <div class="orders-panel">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">Google Agenda</p>
+                  <h3>Encomendas salvas</h3>
+                </div>
+              </div>
+              <div id="ordersList" class="orders-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="relatorios" class="tab-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Banco local de compras</p>
+              <h3>Itens mais comprados</h3>
+            </div>
+            <button id="clearHistory" class="ghost-button" type="button">
+              <span data-icon="trash"></span>
+              Limpar histórico
+            </button>
+          </div>
+          <div id="reportCards" class="report-grid"></div>
+          <div id="popularItems" class="popular-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <template id="productTemplate">
+      <article class="product-card">
+        <div class="product-info">
+          <span class="category"></span>
+          <h3></h3>
+          <p></p>
+          <small></small>
+        </div>
+        <div class="product-actions">
+          <strong></strong>
+          <div class="card-actions">
+            <button class="icon-button edit" type="button" title="Alterar item">
+              <span data-icon="edit"></span>
+            </button>
+            <button class="icon-button danger delete" type="button" title="Excluir item">
+              <span data-icon="trash"></span>
+            </button>
+            <button class="icon-button add" type="button" title="Adicionar item">
+              <span data-icon="plus"></span>
+            </button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
